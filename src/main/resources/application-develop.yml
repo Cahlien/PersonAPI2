@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${DBURL}
+    password: ${DBPASSWORD}
+    username: ${DBUSERNAME}
+  security:
+    user:
+      name: ${SPRINGSECUSER}
+      password: ${SPRINGSECPASS}
+  jpa:
+    properties:
+      jakarta:
+        persistence:
+          schema-generation:
+            database:
+              action: drop-and-create
+              create-target: create.sql
+              create-source: metadata
+    show-sql: true
+  data:
+    rest:
+      basePath: ${API_ROUTE}
+springdoc:
+  paths-to-match:
+    - ${API_ROUTE}/**
+  api-docs:
+      enabled: true
+  swagger-ui:
+    enabled: true
+    path: ${SWAGGER_PATH}
+    default-models-expand-depth: 10
+  show-actuator: true
