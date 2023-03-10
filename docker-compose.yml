@@ -9,6 +9,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
+        - ./src/main/resources/db-data/startup.sql:/docker-entrypoint-initdb.d/startup.sql
         - ./src/main/resources/db-data:/var/lib/postgresql/data
   app:
     build: .
@@ -25,4 +26,5 @@ services:
       API_ROUTE: ${API_ROUTE}
       MATCH_PATH: ${MATCH_PATH}
       SWAGGER_PATH: ${SWAGGER_PATH}
+    restart: always
 
