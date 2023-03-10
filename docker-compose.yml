@@ -1,0 +1,28 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ${DBUSERNAME}
+      POSTGRES_PASSWORD: ${DBPASSWORD}
+      POSTGRES_DB: ${DBNAME}
+    ports:
+      - "5432:5432"
+    volumes:
+        - ./src/main/resources/db-data:/var/lib/postgresql/data
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      DBURL: ${DBURL}
+      DBUSERNAME: ${DBUSERNAME}
+      DBPASSWORD: ${DBPASSWORD}
+      SPRINGSECUSER: ${SPRINGSECUSER}
+      SPRINGSECPASS: ${SPRINGSECPASS}
+      API_ROUTE: ${API_ROUTE}
+      MATCH_PATH: ${MATCH_PATH}
+      SWAGGER_PATH: ${SWAGGER_PATH}
+
