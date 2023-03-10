@@ -13,7 +13,6 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +22,7 @@ import java.util.Optional;
 @RequestMapping("/api/v1/cognomens")
 @Slf4j
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class CognomenController {
     private final CognomenService cognomenService;
 
@@ -46,9 +46,9 @@ public class CognomenController {
     @Operation(summary = "Replace cognomen", description = "Replace an existing cognomen")
     @Parameter(name = "id", description = "The id of the cognomen to replace")
     public ResponseEntity<CognomenDto> replaceCognomen(@PathVariable(name = "id") Long id,
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Cognomen modification request",
-            required = true, content = @Content(schema = @Schema(implementation = CognomenModificationRequest.class)))
-                                                          @RequestBody CognomenModificationRequest request) {
+                                                       @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Cognomen modification request",
+                                                               required = true, content = @Content(schema = @Schema(implementation = CognomenModificationRequest.class)))
+                                                       @RequestBody CognomenModificationRequest request) {
         request.setId(Optional.of(id));
 
         var cognomen = cognomenService.creatOrUpdateCognomen(request);
@@ -62,7 +62,7 @@ public class CognomenController {
     @Operation(summary = "Create cognomen", description = "Create a new cognomen")
     public ResponseEntity<CognomenDto> createCognomen(@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Cognomen modification request",
             required = true, content = @Content(schema = @Schema(implementation = CognomenModificationRequest.class)))
-                                                          @RequestBody CognomenModificationRequest request) {
+                                                      @RequestBody CognomenModificationRequest request) {
         request.setId(Optional.of(0L));
 
         var cognomen = cognomenService.creatOrUpdateCognomen(request);
@@ -76,9 +76,9 @@ public class CognomenController {
     @Operation(summary = "Update cognomen", description = "Update an existing cognomen")
     @Parameter(name = "id", description = "The id of the cognomen to update")
     public ResponseEntity<CognomenDto> updateCognomen(@PathVariable(name = "id") Long id,
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Cognomen modification request",
-            required = true, content = @Content(schema = @Schema(implementation = CognomenModificationRequest.class)))
-                                                          @RequestBody CognomenModificationRequest request) {
+                                                      @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Cognomen modification request",
+                                                              required = true, content = @Content(schema = @Schema(implementation = CognomenModificationRequest.class)))
+                                                      @RequestBody CognomenModificationRequest request) {
         request.setId(Optional.of(id));
 
         var cognomen = cognomenService.creatOrUpdateCognomen(request);

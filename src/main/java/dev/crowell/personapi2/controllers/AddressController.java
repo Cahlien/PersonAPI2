@@ -23,6 +23,7 @@ import java.util.Optional;
 @RequestMapping("/api/v1/addresses")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(origins = "*")
 public class AddressController {
     private final AddressService addressService;
 
@@ -37,49 +38,34 @@ public class AddressController {
     @Parameter(name = "id", description = "The id of the address to get", required = true)
     public ResponseEntity<AddressDto> getAddressById(@PathVariable(name = "id") Long id) {
         var address = addressService.getAddressById(id);
-        return address.map(addressDto -> new ResponseEntity<>(addressDto, HttpStatus.OK)).orElseGet(
-                () -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return address.map(addressDto -> new ResponseEntity<>(addressDto, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
     }
 
     @PostMapping()
     @Operation(summary = "Create a new address", description = "Create a new address in the database")
-    public ResponseEntity<AddressDto> createOrUpdateAddress(
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The address modification request",
-                    required = true, content = @Content(schema = @Schema(implementation =
-                    AddressModificationRequest.class))) @RequestBody AddressModificationRequest request) {
+    public ResponseEntity<AddressDto> createOrUpdateAddress(@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The address modification request", required = true, content = @Content(schema = @Schema(implementation = AddressModificationRequest.class))) @RequestBody AddressModificationRequest request) {
         var address = addressService.createOrUpdateAddress(request);
 
-        return address.map(addressDto -> new ResponseEntity<>(addressDto, HttpStatus.CREATED)).orElseGet(
-                () -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+        return address.map(addressDto -> new ResponseEntity<>(addressDto, HttpStatus.CREATED)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
-    @PutMapping(path = "/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, "*/*"},
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PutMapping(path = "/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, "*/*"}, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @Operation(summary = "Partially update an address", description = "Replace an address in the database")
     @Parameter(name = "id", description = "the id of the address to replace", required = true)
-    public ResponseEntity<AddressDto> partiallyUpdateAddress(@PathVariable(name = "id") Long id,
-                                                             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The address modification request",
-                                                                     required = true, content = @Content(schema = @Schema(implementation =
-                                                                     AddressModificationRequest.class))) @RequestBody AddressModificationRequest request) {
+    public ResponseEntity<AddressDto> partiallyUpdateAddress(@PathVariable(name = "id") Long id, @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The address modification request", required = true, content = @Content(schema = @Schema(implementation = AddressModificationRequest.class))) @RequestBody AddressModificationRequest request) {
         request.setId(Optional.of(id));
         var address = addressService.createOrUpdateAddress(request);
-        return address.map(addressDto -> new ResponseEntity<>(addressDto, HttpStatus.OK)).orElseGet(
-                () -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return address.map(addressDto -> new ResponseEntity<>(addressDto, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PatchMapping(path = "/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, "*/*"},
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PatchMapping(path = "/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, "*/*"}, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @Operation(summary = "Update an address", description = "Update an address in the database")
     @Parameter(name = "id", description = "The id of the address to update", required = true)
-    public ResponseEntity<AddressDto> updateAddress(@PathVariable(name = "id") Long id,
-                                                    @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The address modification request",
-                                                            required = true, content = @Content(schema = @Schema(implementation =
-                                                            AddressModificationRequest.class))) @RequestBody AddressModificationRequest request) {
+    public ResponseEntity<AddressDto> updateAddress(@PathVariable(name = "id") Long id, @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The address modification request", required = true, content = @Content(schema = @Schema(implementation = AddressModificationRequest.class))) @RequestBody AddressModificationRequest request) {
         request.setId(Optional.of(id));
         var address = addressService.createOrUpdateAddress(request);
-        return address.map(addressDto -> new ResponseEntity<>(addressDto, HttpStatus.OK)).orElseGet(
-                () -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return address.map(addressDto -> new ResponseEntity<>(addressDto, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
 
