@@ -5,9 +5,10 @@ spring:
     password: ${DBPASSWORD}
     username: ${DBUSERNAME}
   security:
-    user:
-      name: ${SPRINGSECUSER}
-      password: ${SPRINGSECPASS}
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${ISSUER_URI}
   jpa:
     properties:
       jakarta:

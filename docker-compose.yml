@@ -17,6 +17,7 @@ services:
       - "8080:8080"
     depends_on:
       - db
+      - auth
     environment:
       DBURL: ${DBURL}
       DBUSERNAME: ${DBUSERNAME}
@@ -26,5 +27,12 @@ services:
       API_ROUTE: ${API_ROUTE}
       MATCH_PATH: ${MATCH_PATH}
       SWAGGER_PATH: ${SWAGGER_PATH}
+      ISSUER_URI: ${ISSUER_URI}
     restart: always
-
+  auth:
+    build: https://github.com/cahlien/personapiauthservice.git
+    ports:
+      - "9000:9000"
+    environment:
+      CONSUMER_URI: "app:8080"
+    restart: always
