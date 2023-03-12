@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PersonDto {
+    private Long id;
     @Embedded
     private PersonalNameDto personalName;
     private AddressDto address;
