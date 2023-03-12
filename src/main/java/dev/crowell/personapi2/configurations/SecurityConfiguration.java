@@ -13,10 +13,12 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests()
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
                 .and()
-                .csrf().disable()
-                .cors();
+                .oauth2ResourceServer().jwt();
+
+        http.csrf().disable().cors();
+
         return http.build();
 
     }
