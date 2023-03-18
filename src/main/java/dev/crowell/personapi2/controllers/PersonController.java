@@ -8,13 +8,16 @@ import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -25,11 +28,15 @@ import java.util.Optional;
 @Cacheable(value = "people")
 public class PersonController {
     private final PersonService personService;
+    private final CacheManager cacheManager;
 
 
     @GetMapping()
     @Operation(summary = "Get all people", description = "Get all people in the database")
-    public ResponseEntity<Page<PersonDto>> getPeople(@ParameterObject Pageable page) {
+    public ResponseEntity<Page<PersonDto>> getPeople(@ParameterObject Pageable page, @Param("invalidate") Optional<String> invalidate) {
+        if(invalidate.isPresent() && invalidate.get().equals("true")){
+            Objects.requireNonNull(cacheManager.getCache("people"), "Cache of people is null").clear();
+        }
         return new ResponseEntity<>(personService.getAllPeople(page), HttpStatus.OK);
     }
 
