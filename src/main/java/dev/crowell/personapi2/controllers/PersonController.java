@@ -43,7 +43,10 @@ public class PersonController {
     @GetMapping(path = "/{id}")
     @Operation(summary = "Get a person", description = "Get a person in the database")
     @Parameter(name = "id", description = "The id of the person to get")
-    public ResponseEntity<PersonDto> getPersonById(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<PersonDto> getPersonById(@PathVariable(name = "id") Long id, @Param("invalidate") Optional<String> invalidate) {
+        if(invalidate.isPresent() && invalidate.get().equals("true")){
+            Objects.requireNonNull(cacheManager.getCache("people"), "Cache of people is null").clear();
+        }
         var person = personService.getPersonById(id);
         return person.map(personDto -> new ResponseEntity<>(personDto, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
